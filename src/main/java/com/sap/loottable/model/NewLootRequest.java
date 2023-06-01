@@ -6,10 +6,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("raidloot")
-public class SendNewLootRequest {
+public class NewLootRequest {
 
     @Id
-    private String id;
+    private String mongoId;
     private String player;
     private String date;
     private String time;
@@ -18,14 +18,14 @@ public class SendNewLootRequest {
     private String itemName;
 
 
-    public SendNewLootRequest() {
+    public NewLootRequest() {
     }
 
-    public SendNewLootRequest(String player, String date, String time, String id, String instance, String boss, String itemName) {
+    public NewLootRequest(String player, String date, String time, String instance, String boss, String itemName) {
+        super();
         this.player = player;
         this.date = date;
         this.time = time;
-        this.id = id;
         this.instance = instance;
         this.boss = boss;
         this.itemName = itemName;
@@ -56,15 +56,6 @@ public class SendNewLootRequest {
 
     public void setTime(String time) {
         this.time = time;
-    }
-
-    @JsonProperty("id")
-    public String getId() {
-        return this.id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     @JsonProperty("instance")
