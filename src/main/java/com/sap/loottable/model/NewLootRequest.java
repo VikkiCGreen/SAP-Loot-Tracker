@@ -3,6 +3,7 @@ package com.sap.loottable.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("raidloot")
@@ -10,6 +11,8 @@ public class NewLootRequest {
 
     @Id
     private String mongoId;
+    @Indexed(unique = true)
+    private String id;
     private String player;
     private String date;
     private String time;
@@ -17,11 +20,10 @@ public class NewLootRequest {
     private String boss;
     private String itemName;
 
-
     public NewLootRequest() {
     }
 
-    public NewLootRequest(String player, String date, String time, String instance, String boss, String itemName) {
+    public NewLootRequest(String player, String date, String time, String instance, String boss, String itemName, String id) {
         super();
         this.player = player;
         this.date = date;
@@ -29,6 +31,7 @@ public class NewLootRequest {
         this.instance = instance;
         this.boss = boss;
         this.itemName = itemName;
+        this.id = id;
     }
 
     @JsonProperty("player")
@@ -83,5 +86,14 @@ public class NewLootRequest {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    @JsonProperty("id")
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

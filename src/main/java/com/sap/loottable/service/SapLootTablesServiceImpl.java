@@ -25,7 +25,7 @@ public class SapLootTablesServiceImpl implements SapLootTablesService {
             //TODO: split the instance string to get raid difficulty
             for(NewLootRequest newLootRequest : lootRequest)
             {
-                itemRepository.save(new NewLootRequest(newLootRequest.getPlayer(), newLootRequest.getDate(), newLootRequest.getTime(), newLootRequest.getInstance(), newLootRequest.getBoss(), newLootRequest.getItemName()));
+                itemRepository.save(new NewLootRequest(newLootRequest.getPlayer(), newLootRequest.getDate(), newLootRequest.getTime(), newLootRequest.getInstance(), newLootRequest.getBoss(), newLootRequest.getItemName(), newLootRequest.getId()));
             }
             lootResponse.setDummyString("Number of loot entries added: " + lootRequest.size());
         } catch(Exception exception) {
