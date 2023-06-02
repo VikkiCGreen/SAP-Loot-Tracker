@@ -1,6 +1,6 @@
 package com.sap.loottable.model;
 
-public class SendNewLootResponse {
+public class NewLootResponse {
     public String dummyString;
 
     public String getDummyString() {

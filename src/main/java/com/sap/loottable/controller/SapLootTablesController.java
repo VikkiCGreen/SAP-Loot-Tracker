@@ -29,7 +29,7 @@ public class SapLootTablesController {
 
     @Operation(summary = "Send New Loot", description = "Post new loot info to the database", method = "POST", tags = {"Loot Tables"})
     @PostMapping("/sendNewLoot")
-    public ResponseEntity<SendNewLootResponse> sendNewLoot(@Valid @RequestBody List<SendNewLootRequest> sendNewLootRequest) {
+    public ResponseEntity<NewLootResponse> sendNewLoot(@Valid @RequestBody List<NewLootRequest> sendNewLootRequest) {
         //TODO
         return ResponseEntity.ok(service.processSendNewLootRequest(sendNewLootRequest));
     }
