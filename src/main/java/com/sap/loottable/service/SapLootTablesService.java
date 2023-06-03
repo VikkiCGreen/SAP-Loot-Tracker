@@ -7,5 +7,7 @@ import java.util.List;
 public interface SapLootTablesService {
 
     NewLootResponse processSendNewLootRequest(List<NewLootRequest> lootRequest);
+
+    List<NewLootRequest> processGetAllLootRequest();
     
 }

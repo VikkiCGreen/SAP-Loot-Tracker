@@ -1,36 +1,72 @@
 package com.sap.loottable.service;
 
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sap.loottable.config.ItemRepository;
 import com.sap.loottable.model.NewLootRequest;
 import com.sap.loottable.model.NewLootResponse;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 
 @Service
 public class SapLootTablesServiceImpl implements SapLootTablesService {
 
-    @Autowired
-	ItemRepository itemRepository;
+    final
+    ItemRepository itemRepository;
     
     private static final Logger LOGGER = LoggerFactory.getLogger(SapLootTablesServiceImpl.class);
+
+    public SapLootTablesServiceImpl(ItemRepository itemRepository) {
+        this.itemRepository = itemRepository;
+    }
 
     @Override
     public NewLootResponse processSendNewLootRequest(List<NewLootRequest> lootRequest) {
         NewLootResponse lootResponse = new NewLootResponse();
         try {
             //TODO: split the instance string to get raid difficulty
-            for(NewLootRequest newLootRequest : lootRequest)
-            {
-                itemRepository.save(new NewLootRequest(newLootRequest.getPlayer(), newLootRequest.getDate(), newLootRequest.getTime(), newLootRequest.getInstance(), newLootRequest.getBoss(), newLootRequest.getItemName(), newLootRequest.getId()));
+
+            //make an empty List of NewLootRequest objects
+            List<NewLootRequest> uniqueLootList = new ArrayList<>();
+            // loop through the lootRequest list and add to empty list
+            for (NewLootRequest loot : lootRequest) {
+                var item = new NewLootRequest(
+                        loot.getPlayer(),
+                        loot.getDate(),
+                        loot.getTime(),
+                        loot.getInstance(),
+                        loot.getBoss(),
+                        loot.getItemName(),
+                        loot.getID(),
+                        loot.getItemID(),
+                        loot.getItemMedia()
+                );
+                // check mongo for existing entry
+                if (itemRepository.existsByRcId(item.getID())) {
+                    LOGGER.info("Item already exists in database: " + item.getItemName());
+                } else {
+                    uniqueLootList.add(item);
+                }
             }
-            lootResponse.setDummyString("Number of loot entries added: " + lootRequest.size());
+            itemRepository.saveAll(uniqueLootList);
+            lootResponse.setDummyString("Number of loot entries added: " + uniqueLootList.size());
         } catch(Exception exception) {
-            throw new UnsupportedOperationException("Unimplemented method 'processSendNewLootRequest'");
+            throw new UnsupportedOperationException(exception);
         }
         return lootResponse;
+    }
+
+    @Override
+    public List<NewLootRequest> processGetAllLootRequest() {
+        List<NewLootRequest> lootList;
+        try {
+            lootList = itemRepository.findAll();
+        } catch(Exception exception) {
+            throw new UnsupportedOperationException(exception);
+        }
+        return lootList;
     }
 }
