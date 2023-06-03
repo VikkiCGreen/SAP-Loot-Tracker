@@ -34,7 +34,7 @@ public class SapLootTablesServiceImpl implements SapLootTablesService {
             //add entries to the db, ignore entries that already exist
             for (NewLootRequest loot : lootRequest) {
                 //get and set raid difficulty since we're already looping
-                loot.setDifficulty(getRaidDifficulty(loot));
+                getRaidDifficulty(loot, errorEntries);
                 if (itemRepository.existsByRcId(loot.getID())) {
                     errorEntries.add(loot);
                 } else {
@@ -65,12 +65,19 @@ public class SapLootTablesServiceImpl implements SapLootTablesService {
         return lootList;
     }
 
-    public String getRaidDifficulty(NewLootRequest lootRequest) {
+    public void getRaidDifficulty(NewLootRequest lootRequest, ArrayList<NewLootRequest> errorEntries) {
         try {
+            String difficulty = "";
             String instance = lootRequest.getInstance();
-            String difficulty = instance.split("-")[1];
-            lootRequest.setInstance(instance.split("-")[0]);
-            return difficulty;
+            if(instance.split("-").length > 1) {
+                difficulty = instance.split("-")[1];
+                lootRequest.setDifficulty(difficulty);
+                lootRequest.setInstance(instance.split("-")[0]);
+            }
+            else {
+                errorEntries.add(lootRequest);
+            }
+            return;
         } catch(Exception ex) {
             throw ex;
         }
