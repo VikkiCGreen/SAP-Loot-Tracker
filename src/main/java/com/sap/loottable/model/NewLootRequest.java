@@ -17,6 +17,7 @@ public class NewLootRequest {
     private String date;
     private String time;
     private String instance;
+    private String difficulty;
     private String boss;
     private Integer itemID;
     private String itemName;
@@ -105,10 +106,23 @@ public class NewLootRequest {
     @Valid
     @JsonProperty("itemID")
     public Integer getItemID() { return this.itemID; }
-    public void setItemId(Integer itemID) { this.itemID = itemID; }
+
+    public void setItemID(Integer itemID) {
+        this.itemID = itemID;
+    }
 
     @Valid
     @JsonProperty("itemMedia")
     public String getItemMedia() { return this.itemMedia; }
     public void setItemMedia(String itemMedia) { this.itemMedia = itemMedia; }
+
+    @Valid
+    public String getDifficulty() {
+        return this.difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+    }
+
 }

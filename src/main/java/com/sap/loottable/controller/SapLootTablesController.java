@@ -35,7 +35,6 @@ public class SapLootTablesController {
     @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
     @ApiResponse(responseCode = "500", description = "Internal Server Error",content = @Content)
     public ResponseEntity<NewLootResponse> sendNewLoot(@Valid @RequestBody List<NewLootRequest> sendNewLootRequest) throws Exception {
-        //TODO: get and set raid difficulty
 
         //TODO: auth0 stuff, headers
         LOGGER.debug("Received a new loot request from...");
