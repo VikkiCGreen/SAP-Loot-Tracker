@@ -1,13 +1,23 @@
 package com.sap.loottable.model;
 
 public class NewLootResponse {
-    public String dummyString;
+    private String successfulEntries;
+    private String failedEntries;
 
-    public String getDummyString() {
-        return this.dummyString;
+    public String getSuccessfulEntries() {
+        return this.successfulEntries;
     }
 
-    public void setDummyString(String dummyString) {
-        this.dummyString = dummyString;
+    public void setSuccessfulEntries(String successString) {
+        this.successfulEntries = successString;
     }
+
+    public String getFailedEntries() {
+        return this.failedEntries;
+    }
+
+    public void setFailedEntries(String errorString) {
+        this.failedEntries = errorString;
+    }
+
 }
