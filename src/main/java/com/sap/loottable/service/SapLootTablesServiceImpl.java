@@ -31,34 +31,23 @@ public class SapLootTablesServiceImpl implements SapLootTablesService {
         NewLootResponseList lootResponseList = new NewLootResponseList(successfulEntries, errorEntries);
         NewLootResponse lootResponse = new NewLootResponse();
         try {
-            // loop through the lootRequest list and add to empty list
+            //add entries to the db, ignore entries that already exist
             for (NewLootRequest loot : lootRequest) {
-                var item = new NewLootRequest(
-                        loot.getPlayer(),
-                        loot.getDate(),
-                        loot.getTime(),
-                        loot.getInstance(),
-                        loot.getBoss(),
-                        loot.getItemName(),
-                        loot.getID(),
-                        loot.getItemID(),
-                        loot.getItemMedia()
-                );
-                // check mongo for existing entry
-                if (itemRepository.existsByRcId(item.getID())) {
-                    errorEntries.add(item);
+                if (itemRepository.existsByRcId(loot.getID())) {
+                    errorEntries.add(loot);
                 } else {
-                    successfulEntries.add(item);
+                    successfulEntries.add(loot);
                 }
             }
             lootResponseList.setSuccessfulEntries(successfulEntries);
             lootResponseList.setErrorEntries(errorEntries);
             itemRepository.saveAll(lootResponseList.getSuccessfulEntries());
             lootResponse.setSuccessfulEntries("Number of loot entries added: " + lootResponseList.getSuccessfulEntries().size());
-            //TODO: probably want to identify the faild ones by itemID
+            //TODO: probably want to identify the failed ones by itemID
             lootResponse.setFailedEntries("Number of failed entries: " + lootResponseList.getErrorEntries().size());
         } catch(Exception exception) {
-            throw new UnsupportedOperationException(exception);
+            LOGGER.error("Unable to update table");
+            throw exception;
         }
         return lootResponse;
     }
