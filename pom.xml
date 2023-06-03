@@ -49,6 +49,38 @@
 			<artifactId>spring-data-mongodb</artifactId>
 			<version>4.1.0</version>
 		</dependency>
+ 
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>4.4.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.26</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>2.0.1.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.github.eisop</groupId>
+			<artifactId>checker-qual</artifactId>
+			<version>3.0.0-b2</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

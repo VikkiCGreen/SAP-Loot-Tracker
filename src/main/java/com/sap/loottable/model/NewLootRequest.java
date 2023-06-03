@@ -2,6 +2,8 @@ package com.sap.loottable.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.Valid;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,21 +12,20 @@ public class NewLootRequest {
 
     @Id
     private String mongoId;
-    private String id;
     private String rcId;
     private String player;
     private String date;
     private String time;
     private String instance;
     private String boss;
-    private String itemID;
+    private Integer itemID;
     private String itemName;
     private String itemMedia;
 
     public NewLootRequest() {
     }
 
-    public NewLootRequest(String player, String date, String time, String instance, String boss, String itemName, String id, String itemID, String itemMedia) {
+    public NewLootRequest(String player, String date, String time, String instance, String boss, String itemName, String id, Integer itemID, String itemMedia) {
         super();
         this.player = player;
         this.date = date;
@@ -37,6 +38,7 @@ public class NewLootRequest {
         this.itemMedia = itemMedia;
     }
 
+    @Valid
     @JsonProperty("player")
     public String getPlayer() {
         return this.player;
@@ -46,6 +48,7 @@ public class NewLootRequest {
         this.player = player;
     }
 
+    @Valid
     @JsonProperty("date")
     public String getDate() {
         return this.date;
@@ -55,6 +58,7 @@ public class NewLootRequest {
         this.date = date;
     }
 
+    @Valid
     @JsonProperty("time")
     public String getTime() {
         return this.time;
@@ -73,6 +77,7 @@ public class NewLootRequest {
         this.instance = instance;
     }
 
+    @Valid
     @JsonProperty("boss")
     public String getBoss() {
         return this.boss;
@@ -82,6 +87,7 @@ public class NewLootRequest {
         this.boss = boss;
     }
 
+    @Valid
     @JsonProperty("itemName")
     public String getItemName() {
         return this.itemName;
@@ -91,14 +97,17 @@ public class NewLootRequest {
         this.itemName = itemName;
     }
 
+    @Valid
     @JsonProperty("id")
     public String getID() { return this.rcId; }
     public void setId(String id) { this.rcId = id; }
 
+    @Valid
     @JsonProperty("itemID")
-    public String getItemID() { return this.itemID; }
-    public void setItemId(String itemID) { this.itemID = itemID; }
+    public Integer getItemID() { return this.itemID; }
+    public void setItemId(Integer itemID) { this.itemID = itemID; }
 
+    @Valid
     @JsonProperty("itemMedia")
     public String getItemMedia() { return this.itemMedia; }
     public void setItemMedia(String itemMedia) { this.itemMedia = itemMedia; }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.sap.loottable.config.ItemRepository;
 import com.sap.loottable.model.NewLootRequest;
 import com.sap.loottable.model.NewLootResponse;
+import com.sap.loottable.model.NewLootResponseList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +26,11 @@ public class SapLootTablesServiceImpl implements SapLootTablesService {
 
     @Override
     public NewLootResponse processSendNewLootRequest(List<NewLootRequest> lootRequest) {
+        ArrayList<NewLootRequest> successfulEntries = new ArrayList<>();
+        ArrayList<NewLootRequest> errorEntries = new ArrayList<>();
+        NewLootResponseList lootResponseList = new NewLootResponseList(successfulEntries, errorEntries);
         NewLootResponse lootResponse = new NewLootResponse();
         try {
-            //TODO: split the instance string to get raid difficulty
-
-            //make an empty List of NewLootRequest objects
-            List<NewLootRequest> uniqueLootList = new ArrayList<>();
             // loop through the lootRequest list and add to empty list
             for (NewLootRequest loot : lootRequest) {
                 var item = new NewLootRequest(
@@ -46,13 +46,17 @@ public class SapLootTablesServiceImpl implements SapLootTablesService {
                 );
                 // check mongo for existing entry
                 if (itemRepository.existsByRcId(item.getID())) {
-                    LOGGER.info("Item already exists in database: " + item.getItemName());
+                    errorEntries.add(item);
                 } else {
-                    uniqueLootList.add(item);
+                    successfulEntries.add(item);
                 }
             }
-            itemRepository.saveAll(uniqueLootList);
-            lootResponse.setDummyString("Number of loot entries added: " + uniqueLootList.size());
+            lootResponseList.setSuccessfulEntries(successfulEntries);
+            lootResponseList.setErrorEntries(errorEntries);
+            itemRepository.saveAll(lootResponseList.getSuccessfulEntries());
+            lootResponse.setSuccessfulEntries("Number of loot entries added: " + lootResponseList.getSuccessfulEntries().size());
+            //TODO: probably want to identify the faild ones by itemID
+            lootResponse.setFailedEntries("Number of failed entries: " + lootResponseList.getErrorEntries().size());
         } catch(Exception exception) {
             throw new UnsupportedOperationException(exception);
         }
