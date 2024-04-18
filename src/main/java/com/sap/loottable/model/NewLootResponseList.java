@@ -1,7 +1,6 @@
 package com.sap.loottable.model;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class NewLootResponseList {
 

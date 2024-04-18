@@ -30,6 +30,7 @@ public class SapLootTablesServiceImpl implements SapLootTablesService {
         ArrayList<NewLootRequest> errorEntries = new ArrayList<>();
         NewLootResponseList lootResponseList = new NewLootResponseList(successfulEntries, errorEntries);
         NewLootResponse lootResponse = new NewLootResponse();
+        //TODO move the try/catch into the for loop so the entire operation won't fail if one fails
         try {
             //add entries to the db, ignore entries that already exist
             for (NewLootRequest loot : lootRequest) {
@@ -63,6 +64,24 @@ public class SapLootTablesServiceImpl implements SapLootTablesService {
             throw new UnsupportedOperationException(exception);
         }
         return lootList;
+    }
+
+    @Override
+    public List<NewLootRequest> processGetLootByRequest(String boss, String difficulty) {
+        List<NewLootRequest> lootList = new ArrayList<>();
+        try {
+            if(boss != null) {
+                lootList = itemRepository.findByBoss(boss);
+            }
+            if(difficulty != null)
+            {
+                lootList = itemRepository.findByDifficulty(difficulty);
+            }
+            return lootList;
+        } catch(Exception exception) {
+            throw exception;
+        }
+        
     }
 
     public void getRaidDifficulty(NewLootRequest lootRequest, ArrayList<NewLootRequest> errorEntries) {

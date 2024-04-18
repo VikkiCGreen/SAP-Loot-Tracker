@@ -43,10 +43,15 @@ public class SapLootTablesController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Get All Loot", description = "Get all loot info from the database", method = "GET", tags = {"Loot Tables"})
     @GetMapping("/getAllLoot")
+    @Operation(summary = "Get All Loot", description = "Get all loot info from the database", method = "GET", tags = {"Loot Tables"})
     public ResponseEntity<List<NewLootRequest>> getAllLoot() {
         return ResponseEntity.ok(service.processGetAllLootRequest());
+    }
+
+    @GetMapping("/getLootBy")
+    public ResponseEntity<List<NewLootRequest>> getLootByBoss(@RequestParam(required = false, value = "boss") String boss, @RequestParam(required = false, value="difficulty") String difficulty) {
+        return ResponseEntity.ok(service.processGetLootByRequest(boss, difficulty));
     }
 
     // TODO:
