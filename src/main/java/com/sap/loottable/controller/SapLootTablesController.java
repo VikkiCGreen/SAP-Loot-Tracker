@@ -17,7 +17,7 @@ import java.util.List;
 import org.slf4j.Logger;
 
 @RestController
-@RequestMapping("api/sap")
+@RequestMapping("api/sap/loot")
 @Validated
 @CrossOrigin(origins = "https://localhost:3000")
 @Tag(name = "Loot Tables", description = "Operations pertaining to Loot Tables")
@@ -29,7 +29,7 @@ public class SapLootTablesController {
         this.service = service;
     }
 
-    @PostMapping("/sendNewLoot")
+    @PostMapping("/")
     @Operation(summary = "Send New Loot", description = "Post new loot info to the database", method = "POST", tags = {"Loot Tables"})
     @ApiResponse(responseCode = "200", description = "Loot added successfully", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = NewLootRequest.class))})
     @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
@@ -43,15 +43,10 @@ public class SapLootTablesController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/getAllLoot")
+    @GetMapping("/")
     @Operation(summary = "Get All Loot", description = "Get all loot info from the database", method = "GET", tags = {"Loot Tables"})
-    public ResponseEntity<List<NewLootRequest>> getAllLoot() {
-        return ResponseEntity.ok(service.processGetAllLootRequest());
-    }
-
-    @GetMapping("/getLootBy")
-    public ResponseEntity<List<NewLootRequest>> getLootByBoss(@RequestParam(required = false, value = "boss") String boss, @RequestParam(required = false, value="difficulty") String difficulty) {
-        return ResponseEntity.ok(service.processGetLootByRequest(boss, difficulty));
+    public ResponseEntity<List<NewLootRequest>> getLoot( @RequestParam(required = false, value = "boss") String boss, @RequestParam(required = false, value="difficulty") String difficulty ) {
+        return ResponseEntity.ok(service.processGetLootRequest(boss, difficulty));
     }
 
     // TODO:
@@ -63,5 +58,6 @@ public class SapLootTablesController {
     // Operations: Get Loot By Date
     // Operations: Get Loot By Raid Difficulty
     // Operations: Get Loot By Raid
+    // Operations: Get Loot By Response
     
 }

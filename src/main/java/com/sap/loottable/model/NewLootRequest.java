@@ -22,11 +22,12 @@ public class NewLootRequest {
     private Integer itemID;
     private String itemName;
     private String itemMedia;
+    private String response;
 
     public NewLootRequest() {
     }
 
-    public NewLootRequest(String player, String date, String time, String instance, String boss, String itemName, String id, Integer itemID, String itemMedia) {
+    public NewLootRequest(String player, String date, String time, String instance, String boss, String itemName, String id, Integer itemID, String itemMedia, String response) {
         super();
         this.player = player;
         this.date = date;
@@ -37,6 +38,7 @@ public class NewLootRequest {
         this.rcId = id;
         this.itemID = itemID;
         this.itemMedia = itemMedia;
+        this.response = response;
     }
 
     @Valid
@@ -125,4 +127,12 @@ public class NewLootRequest {
         this.difficulty = difficulty;
     }
 
+    @Valid
+    @JsonProperty("response")
+    public String getResponse() {
+        return this.response;
+    }
+    public void setResponse(String response) {
+        this.response = response;
+    }
 }

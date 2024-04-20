@@ -8,8 +8,6 @@ public interface SapLootTablesService {
 
     NewLootResponse processSendNewLootRequest(List<NewLootRequest> lootRequest);
 
-    List<NewLootRequest> processGetAllLootRequest();
-
-    List<NewLootRequest> processGetLootByRequest(String boss, String difficulty);
+    List<NewLootRequest> processGetLootRequest(String boss, String difficulty);
     
 }

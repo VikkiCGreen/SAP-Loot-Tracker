@@ -35,7 +35,9 @@ public class SapLootTablesServiceImpl implements SapLootTablesService {
             //add entries to the db, ignore entries that already exist
             for (NewLootRequest loot : lootRequest) {
                 //get and set raid difficulty since we're already looping
+                
                 getRaidDifficulty(loot, errorEntries);
+                fixDate(loot, errorEntries);
                 if (itemRepository.existsByRcId(loot.getID())) {
                     errorEntries.add(loot);
                 } else {
@@ -56,32 +58,35 @@ public class SapLootTablesServiceImpl implements SapLootTablesService {
     }
 
     @Override
-    public List<NewLootRequest> processGetAllLootRequest() {
-        List<NewLootRequest> lootList;
-        try {
-            lootList = itemRepository.findAll();
-        } catch(Exception exception) {
-            throw new UnsupportedOperationException(exception);
+    public List<NewLootRequest> processGetLootRequest( String boss, String difficulty ) {
+
+        List<NewLootRequest> lootList = new ArrayList<NewLootRequest>();
+
+        if(boss == null && difficulty == null)
+        {
+            try {
+                lootList = itemRepository.findAll();
+            } catch(Exception exception) {
+                throw new UnsupportedOperationException(exception);
+            }
+        }
+        else
+        {
+            try {
+                //TODO: append not only 1 at a time
+                if(boss != null) {
+                    lootList = itemRepository.findByBossIgnoreCase(boss);
+                }
+                if(difficulty != null)
+                {
+                    lootList = itemRepository.findByDifficultyIgnoreCase(difficulty);
+                }
+
+            } catch(Exception exception) {
+                throw exception;
+            }
         }
         return lootList;
-    }
-
-    @Override
-    public List<NewLootRequest> processGetLootByRequest(String boss, String difficulty) {
-        List<NewLootRequest> lootList = new ArrayList<>();
-        try {
-            if(boss != null) {
-                lootList = itemRepository.findByBoss(boss);
-            }
-            if(difficulty != null)
-            {
-                lootList = itemRepository.findByDifficulty(difficulty);
-            }
-            return lootList;
-        } catch(Exception exception) {
-            throw exception;
-        }
-        
     }
 
     public void getRaidDifficulty(NewLootRequest lootRequest, ArrayList<NewLootRequest> errorEntries) {
@@ -98,6 +103,25 @@ public class SapLootTablesServiceImpl implements SapLootTablesService {
             }
             return;
         } catch(Exception ex) {
+            throw ex;
+        }
+    }
+
+    public void fixDate(NewLootRequest lootRequest, ArrayList<NewLootRequest> errorEntries) {
+        try{
+            String date = lootRequest.getDate();
+            String fixedDate = "";
+            if(date.contains("/"))
+            {
+                fixedDate = date.replaceAll("/", "");
+                lootRequest.setDate(fixedDate);
+            }
+            else {
+                errorEntries.add(lootRequest);
+            }
+            return;
+        }
+        catch(Exception ex) {
             throw ex;
         }
     }
