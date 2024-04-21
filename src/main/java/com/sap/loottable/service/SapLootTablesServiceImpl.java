@@ -1,6 +1,8 @@
 package com.sap.loottable.service;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import com.sap.loottable.config.ItemRepository;
@@ -34,8 +36,8 @@ public class SapLootTablesServiceImpl implements SapLootTablesService {
         try {
             //add entries to the db, ignore entries that already exist
             for (NewLootRequest loot : lootRequest) {
-                //get and set raid difficulty since we're already looping
                 
+                //get and set raid difficulty since we're already looping
                 getRaidDifficulty(loot, errorEntries);
                 fixDate(loot, errorEntries);
                 if (itemRepository.existsByRcId(loot.getID())) {
@@ -58,35 +60,38 @@ public class SapLootTablesServiceImpl implements SapLootTablesService {
     }
 
     @Override
-    public List<NewLootRequest> processGetLootRequest( String boss, String difficulty ) {
+    public List<NewLootRequest> processGetLootRequest( String boss, String difficulty, String player, String instance, String response, String date ) {
+        NewLootRequest savedLootRequest = new NewLootRequest();
 
-        List<NewLootRequest> lootList = new ArrayList<NewLootRequest>();
-
-        if(boss == null && difficulty == null)
+        if(boss == null && difficulty == null && player == null && instance == null && response == null && date == null)
         {
-            try {
-                lootList = itemRepository.findAll();
-            } catch(Exception exception) {
-                throw new UnsupportedOperationException(exception);
-            }
+            return itemRepository.findAll(Example.of(savedLootRequest));
         }
-        else
+        if(boss != null) {
+            savedLootRequest.setBoss(boss);
+        }
+        if(difficulty != null) {
+            savedLootRequest.setDifficulty(difficulty);
+        }
+        if(player != null)
         {
-            try {
-                //TODO: append not only 1 at a time
-                if(boss != null) {
-                    lootList = itemRepository.findByBossIgnoreCase(boss);
-                }
-                if(difficulty != null)
-                {
-                    lootList = itemRepository.findByDifficultyIgnoreCase(difficulty);
-                }
-
-            } catch(Exception exception) {
-                throw exception;
-            }
+            savedLootRequest.setPlayer(player);
         }
-        return lootList;
+        if(instance != null)
+        {
+            savedLootRequest.setInstance(instance);
+        }
+        if(response != null)
+        {
+            savedLootRequest.setResponse(response);
+        }
+        if(date != null)
+        {
+            savedLootRequest.setDate(date);
+        }
+
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase();
+        return itemRepository.findAll(Example.of(savedLootRequest, matcher));
     }
 
     public void getRaidDifficulty(NewLootRequest lootRequest, ArrayList<NewLootRequest> errorEntries) {

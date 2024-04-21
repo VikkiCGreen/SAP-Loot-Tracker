@@ -1,5 +1,6 @@
 package com.sap.loottable.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.Valid;
@@ -21,13 +22,13 @@ public class NewLootRequest {
     private String boss;
     private Integer itemID;
     private String itemName;
-    private String itemMedia;
     private String response;
+    private String playerClass;
 
     public NewLootRequest() {
     }
 
-    public NewLootRequest(String player, String date, String time, String instance, String boss, String itemName, String id, Integer itemID, String itemMedia, String response) {
+    public NewLootRequest(String player, String date, String time, String instance, String boss, String itemName, String id, Integer itemID, String response, String playerClass) {
         super();
         this.player = player;
         this.date = date;
@@ -37,8 +38,8 @@ public class NewLootRequest {
         this.itemName = itemName;
         this.rcId = id;
         this.itemID = itemID;
-        this.itemMedia = itemMedia;
         this.response = response;
+        this.playerClass = playerClass;
     }
 
     @Valid
@@ -114,11 +115,6 @@ public class NewLootRequest {
     }
 
     @Valid
-    @JsonProperty("itemMedia")
-    public String getItemMedia() { return this.itemMedia; }
-    public void setItemMedia(String itemMedia) { this.itemMedia = itemMedia; }
-
-    @Valid
     public String getDifficulty() {
         return this.difficulty;
     }
@@ -134,5 +130,15 @@ public class NewLootRequest {
     }
     public void setResponse(String response) {
         this.response = response;
+    }
+
+    @JsonAlias({"class", "playerClass"})
+    public String getPlayerClass() {
+        return this.playerClass;
+    }
+    
+    @JsonProperty("playerClass")
+    public void setPlayerClass(String playerClass) {
+        this.playerClass = playerClass;
     }
 }

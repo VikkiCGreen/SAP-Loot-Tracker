@@ -45,19 +45,13 @@ public class SapLootTablesController {
 
     @GetMapping("/")
     @Operation(summary = "Get All Loot", description = "Get all loot info from the database", method = "GET", tags = {"Loot Tables"})
-    public ResponseEntity<List<NewLootRequest>> getLoot( @RequestParam(required = false, value = "boss") String boss, @RequestParam(required = false, value="difficulty") String difficulty ) {
-        return ResponseEntity.ok(service.processGetLootRequest(boss, difficulty));
+    public ResponseEntity<List<NewLootRequest>> getLoot( @RequestParam(required = false, value = "boss") String boss, @RequestParam(required = false, value="difficulty") String difficulty,
+    @RequestParam(required = false, value = "player") String player, @RequestParam(required = false, value = "instance") String instance, @RequestParam(required = false, value = "response") String response,
+    @RequestParam(required = false, value = "date") String date ) {
+        return ResponseEntity.ok(service.processGetLootRequest(boss, difficulty, player, instance, response, date));
     }
 
     // TODO:
-// Operations: Get Loot By Character
-// Operations: Get Loot By Boss (Mythic)
-
-
     // Operations: Delete Loot 
-    // Operations: Get Loot By Date
-    // Operations: Get Loot By Raid Difficulty
-    // Operations: Get Loot By Raid
-    // Operations: Get Loot By Response
     
 }
